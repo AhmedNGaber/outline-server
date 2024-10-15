@@ -454,9 +454,7 @@ install_shadowbox() {
   local MACHINE_TYPE
   MACHINE_TYPE="$(uname -m)"
   if [[ "${MACHINE_TYPE}" != "x86_64" ]]; then
-    log_command "Will try it for machine type: ${MACHINE_TYPE}"
-#    log_error "Unsupported machine type: ${MACHINE_TYPE}. Please run this script on a x86_64 machine"
-#    exit 1
+    echo "Will try it for machine type: ${MACHINE_TYPE}"
   fi
 
   # Make sure we don't leak readable files to other users.
