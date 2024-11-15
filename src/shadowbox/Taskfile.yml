@@ -22,8 +22,8 @@ tasks:
     desc: Build the Outline Server Node.js app
     vars:
       TARGET_OS: '{{.TARGET_OS | default "linux"}}'
-      TARGET_ARCH: '{{.TARGET_ARCH | default "x86_64"}}'
-      GOARCH: '{{get (dict "x86_64" "amd64") .TARGET_ARCH | default .TARGET_ARCH}}'
+      TARGET_ARCH: '{{.TARGET_ARCH | default "arm64"}}'
+      GOARCH: '{{get (dict "arm64") .TARGET_ARCH | default .TARGET_ARCH}}'
       TARGET_DIR: '{{.TARGET_DIR | default (joinPath .OUTPUT_BASE .TARGET_OS .TARGET_ARCH)}}'
       NODE_DIR: '{{joinPath .TARGET_DIR "app"}}'
       BIN_DIR: '{{joinPath .TARGET_DIR "bin"}}'
@@ -46,9 +46,9 @@ tasks:
     deps: [{task: build, vars: {TARGET_OS: '{{.TARGET_OS}}', TARGET_ARCH: '{{.TARGET_ARCH}}'}}]
     vars:
       TARGET_OS: {sh: "uname -s | tr '[:upper:]' '[:lower:]'"}
-      TARGET_ARCH: {sh: 'uname -m'}
-      RUN_ID: '{{.RUN_ID | default (now | date "2006-01-02-150405")}}'
-      RUN_DIR: '{{joinPath "/tmp/outline" .RUN_ID}}'
+      TARGET_ARCH: {sh: 'echo arm64'}
+      RUN_ID: '{{.RUN_ID | ".outline")}}'
+      RUN_DIR: '{{joinPath "/home/${USER}" .RUN_ID}}'
       STATE_DIR: '{{joinPath .RUN_DIR "persisted-state"}}'
       STATE_CONFIG: '{{joinPath .STATE_DIR "shadowbox_server_config.json"}}'
       LOG_LEVEL: '{{.LOG_LEVEL | default "debug"}}'
@@ -74,7 +74,7 @@ tasks:
     vars:
       VERSION: '{{.IMAGE_VERSION | default "dev"}}'
       IMAGE_NAME: '{{.IMAGE_NAME | default "localhost/outline/shadowbox"}}'
-      TARGET_ARCH: '{{.TARGET_ARCH | default "x86_64"}}'
+      TARGET_ARCH: '{{.TARGET_ARCH | default "arm64"}}'
       IMAGE_ROOT: '{{joinPath .OUTPUT_BASE "image_root" .TARGET_ARCH}}'
       # Newer node images have no valid content trust data.
       # Pin the image node:16.18.0-alpine3.16 by hash.
@@ -114,12 +114,12 @@ tasks:
     interactive: true
     requires:
       vars: [DOCKER]
-    deps: [{task: docker:build, vars: {TARGET_ARCH: {sh: 'uname -m'}}}]
+    deps: [{task: docker:build, vars: {TARGET_ARCH: {sh: 'echo arm64'}}}]
     vars:
       RUN_DIR: '{{joinPath .OUTPUT_BASE "docker_start"}}'
       IMAGE_NAME: '{{.IMAGE_NAME | default "localhost/outline/shadowbox"}}'
-      API_PORT: '8081'
-      ACCESS_KEY_PORT: '9999'
+      API_PORT: '17214'
+      ACCESS_KEY_PORT: '17215'
       CERTIFICATE_FILE: 'shadowbox-selfsigned-dev.crt'
       PRIVATE_KEY_FILE: 'shadowbox-selfsigned-dev.key'
       HOST_STATE_DIR: '{{joinPath .RUN_DIR "persisted-state"}}'

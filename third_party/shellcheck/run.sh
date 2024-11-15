@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-readonly VERSION='v0.7.1'
+readonly VERSION='v0.10.0'
 
 # The relative location of this script.
 DOWNLOAD_DIR="$(dirname "$0")/download"
@@ -24,7 +24,7 @@ declare file="shellcheck-${VERSION}" # Name of the file to download
 declare cmd="${DOWNLOAD_DIR}/shellcheck-${VERSION}" # Path to the executable
 declare sha256='' # SHA256 checksum
 case "$(uname -s)" in
-  Linux) file+='.linux.x86_64.tar.xz'; cmd+='/shellcheck'; sha256='64f17152d96d7ec261ad3086ed42d18232fcb65148b44571b564d688269d36c8';;
+  Linux) file+='.linux.aarch64.tar.xz'; cmd+='/shellcheck'; sha256='324a7e89de8fa2aed0d0c28f3dab59cf84c6d74264022c00c22af665ed1a09bb';;
   Darwin) file+='.darwin.x86_64.tar.xz'; cmd+='/shellcheck'; sha256='b080c3b659f7286e27004aa33759664d91e15ef2498ac709a452445d47e3ac23' ;;
   *) file+='.zip'; cmd+='.exe'; sha256='1763f8f4a639d39e341798c7787d360ed79c3d68a1cdbad0549c9c0767a75e98';; # Presume Windows/Cygwin
 esac
